@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>消防装备招标专家选取与管理平台</title>
+    <style>
+        /* ===== 全局重置 & 变量 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #c0392b;
+            --primary-dark: #922b21;
+            --bg-light: #f8f9fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --max-width: 1200px;
+        }
+
+        body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+            color: var(--text-dark);
+            background: #fff;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== 按钮 ===== */
+        .btn {
+            display: inline-block;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(192, 57, 43, 0.35);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(192, 57, 43, 0.45);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* ===== 导航 ===== */
+        .navbar {
+            padding: 18px 0;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+        .logo span {
+            color: var(--text-dark);
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            font-weight: 500;
+        }
+        .nav-links a {
+            color: var(--text-dark);
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-download-btn {
+            background: var(--primary);
+            color: #fff !important;
+            padding: 8px 22px;
+            border-radius: 50px;
+            transition: background 0.3s;
+        }
+        .nav-download-btn:hover {
+            background: var(--primary-dark) !important;
+            color: #fff !important;
+        }
+
+        /* ===== Hero 首屏 ===== */
+        .hero {
+            padding: 80px 0 100px;
+            background: linear-gradient(135deg, #fdf2f0 0%, #fff 80%);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        .hero h1 .highlight {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 640px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: #eaf2f8;
+            color: #1a5276;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 28px;
+        }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== 通用标题 ===== */
+        .section-title {
+            text-align: center;
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .section-sub {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 48px;
+        }
+
+        /* ===== 平台简介 ===== */
+        .intro-section {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .intro-text h2 {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+        }
+        .intro-text p {
+            color: var(--text-light);
+            font-size: 1.05rem;
+            margin-bottom: 16px;
+        }
+
+        .intro-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+        .intro-stats .stat-item {
+            background: var(--bg-light);
+            padding: 28px 12px;
+            border-radius: var(--radius);
+            transition: transform 0.2s;
+        }
+        .intro-stats .stat-item:hover {
+            transform: translateY(-4px);
+        }
+        .intro-stats .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .intro-stats .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* ===== 功能卡片 ===== */
+        .features-section {
+            padding: 80px 0;
+            background: var(--bg-light);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: #fff;
+            padding: 36px 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.10);
+        }
+
+        .feature-icon {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+        }
+        .feature-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* ===== 下载区域 ===== */
+        .download-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+            color: #fff;
+            text-align: center;
+        }
+
+        .download-section .section-title {
+            color: #fff;
+        }
+        .download-section .section-sub {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .download-box {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .download-btn-large {
+            display: inline-block;
+            background: #fff;
+            color: #2c3e50;
+            padding: 18px 52px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.15rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .download-btn-large:hover {
+            transform: scale(1.04);
+            box-shadow: 0 12px 44px rgba(0, 0, 0, 0.40);
+        }
+        .download-btn-large .sub {
+            font-weight: 400;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            display: block;
+        }
+
+        .qr-box {
+            background: #fff;
+            padding: 20px 20px 16px;
+            border-radius: var(--radius);
+            text-align: center;
+            color: var(--text-dark);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.20);
+        }
+        .qr-box img {
+            width: 150px;
+            height: 150px;
+            display: block;
+            background: #eee;
+            border-radius: 8px;
+        }
+        .qr-box p {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* ===== 底部 ===== */
+        .footer {
+            padding: 40px 0;
+            background: #f1f2f6;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer a {
+            color: var(--primary);
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.0rem;
+            }
+            .intro-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .intro-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .nav-links {
+                gap: 16px;
+                font-size: 0.9rem;
+            }
+            .download-box {
+                gap: 30px;
+            }
+            .navbar .container {
+                flex-wrap: wrap;
+                gap: 12px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== 导航 ========== -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">🔥 消防装备<span>· 专家平台</span></a>
+            <ul class="nav-links">
+                <li><a href="#intro">平台简介</a></li>
+                <li><a href="#features">核心功能</a></li>
+                <li><a href="#download" class="nav-download-btn">下载客户端</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ========== Hero ========== -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">🏛 面向消防装备招标 · 专家智能管理</div>
+            <h1>
+                消防装备招标<br />
+                <span class="highlight">专家选取与管理平台</span>
+            </h1>
+            <p>
+                面向消防装备采购项目，提供专家库管理、智能随机抽取、自动通知与补抽、全过程留痕的一站式解决方案。
+            </p>
+            <div class="hero-actions">
+                <a href="#download" class="btn btn-primary">💻 下载客户端</a>
+                <a href="#intro" class="btn btn-outline">了解更多 ↓</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 平台简介 ========== -->
+    <section class="intro-section" id="intro">
+        <div class="container">
+            <div class="intro-grid">
+                <div class="intro-text">
+                    <h2>为什么需要这个平台？</h2>
+                    <p>
+                        消防装备招标评审专家的选取，直接关系到采购的公平性与专业性。
+                        传统人工抽取方式效率低、易出错、缺乏透明追溯。
+                    </p>
+                    <p>
+                        本平台提供<b>专家库管理 + 随机抽取 + 自动通知 + 结果存证</b>全流程支持，
+                        让招标专家选取更高效、更公正、更规范。
+                    </p>
+                    <p style="margin-top:12px;color:#2c3e50;font-weight:500;">
+                        ✅ 已服务多个消防采购项目 · 抽取专家 200+ 人次
+                    </p>
+                </div>
+                <div class="intro-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">60+</div>
+                        <div class="stat-label">入库专家</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">30+</div>
+                        <div class="stat-label">招标项目</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">抽取留痕</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 核心功能 ========== -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <h2 class="section-title">核心功能</h2>
+            <p class="section-sub">覆盖专家选取与管理的全生命周期</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📂</div>
+                    <h3>专家库管理</h3>
+                    <p>专家信息录入、分类（灭火/救援/防护/通信装备）、资质审核与动态维护。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎲</div>
+                    <h3>智能随机抽取</h3>
+                    <p>按专业、地区、回避规则随机抽取，算法公正，过程可追溯。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>自动通知 &amp; 补抽</h3>
+                    <p>短信/语音通知专家，系统监听回复确认，拒接或超时自动补抽。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>结果管理与导出</h3>
+                    <p>抽取结果自动记录，支持导出报表，供招标归档与审计使用。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 下载区域 ========== -->
+    <section class="download-section" id="download">
+        <div class="container">
+            <h2 class="section-title">💻 下载客户端</h2>
+            <p class="section-sub">点击按钮下载 Windows 安装包</p>
+
+            <div class="download-box">
+                <!-- 左侧：按钮 -->
+                <div>
+                    <a href="https://chenpeiqing.github.io/setup.exe" class="download-btn-large">
+                        ⬇️ 下载 EXE
+                        <span class="sub">版本 v1.0.0 · 约 22MB</span>
+                    </a>
+                    <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-top:12px;">
+                        支持 Windows 10 / Windows 11
+                    </p>
+                </div>
+
+                <!-- 右侧：二维码 -->
+                <!-- <div class="qr-box"> -->
+                    <!-- 将下面的 src 替换为你自己的二维码图片地址 -->
+                    <!-- <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Crect width='150' height='150' fill='%23e0e0e0'/%3E%3Ctext x='75' y='82' font-size='14' text-anchor='middle' fill='%23999'%3EQR Code%3C/text%3E%3C/svg%3E" alt="下载二维码" />
+                    <p>📱 扫码下载 EXE</p>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 底部 ========== -->
+    <footer class="footer">
+        <div class="container">
+            <p>
+                消防装备招标专家选取与管理平台 &copy; 2026 &nbsp;·&nbsp;
+                仅供演示参考 · <a href="#download">下载客户端</a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
